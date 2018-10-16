@@ -6,12 +6,27 @@ let elements = document.querySelector('[data-slides]');
 let data = elements.getAttribute("data-slides");
 let array = data.split(",");
 
+//PageCounter
+var $counter = document.createElement("count");
+$counter.setAttribute("id", "counter");
+$counter.innerHTML = "1/" + array.length;
+elements.appendChild($counter);
+
+//buttons
 let prev = document.createElement("button");
 prev.innerHTML="Prev";
 elements.appendChild(prev);
 prev.setAttribute("class", "buttonP");
-console.log(prev);
 
+let next = document.createElement("button");
+next.innerHTML = "Next";
+elements.appendChild(next);
+next.setAttribute("class", "buttonN");
+
+prev.addEventListener("click",showPrev);
+next.addEventListener("click",showNext);
+
+//create elements
 for (i=0; i<array.length; i++) {
     let text = array[i];
     var div = document.createElement("div");
@@ -24,14 +39,22 @@ for (i=0; i<array.length; i++) {
         else {div.classList.add("is_shown");}
 }
 
-let next = document.createElement("button");
-next.innerHTML = "Next";
-elements.appendChild(next);
-next.setAttribute("class", "buttonN");
+//pagination creation
 
+for (i=0; i<array.length; i++) {
+        var $pag = document.createElement("li");
+        $pag.setAttribute("id", "p" + i);
+        elements.appendChild($pag);
+    
+        if (i>0) {
+            $pag.classList.add("non_active");}
+            else {$pag.classList.add("active");}
+        
+        $pag.addEventListener("click",pagSwitch.bind(null, i));
+}
 
-prev.addEventListener("click",showPrev);
-next.addEventListener("click",showNext);
+//4 sec next
+setInterval(showNext, 4000);
 
 
 function showPrev() {
@@ -49,8 +72,8 @@ function showPrev() {
         
         document.getElementById("p"+indexNew).setAttribute("class","active");
         document.getElementById("p"+index).setAttribute("class", "non_active"); 
-        $counter.innerHTML = (indexNew*1+1) + "/" + array.length;
 
+        $counter.innerHTML = (indexNew*1+1) + "/" + array.length;
 }
 
 function showNext() {
@@ -80,36 +103,5 @@ function pagSwitch(i){
         document.getElementById(i).setAttribute("class","is_shown");
 
         $counter.innerHTML = (i*1+1) + "/" + array.length;
-};
-
-
-
-//pagination
-
-for (i=0; i<array.length; i++) {
-        var $pag = document.createElement("li");
-        $pag.setAttribute("id", "p" + i);
-        elements.appendChild($pag);
-    
-        if (i>0) {
-            $pag.classList.add("non_active");}
-            else {$pag.classList.add("active");}
-        
-        $pag.addEventListener("click",pagSwitch.bind(null, i));
 }
-
-
-//PageCounter
-var $counter = document.createElement("count");
-$counter.setAttribute("id", "counter");
-$counter.innerHTML = "1/" + array.length;
-elements.appendChild($counter);
-
-
-
-setInterval(showNext, 4000);
-
-
-
-
   })();
